@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Todo;
@@ -13,7 +14,24 @@ class TodoController extends ApiController
      */
     public function index()
     {
-        return response()->json(Todo::all());
+        $today = now();
+        $endDate = now()->addDays(30);
+
+        // Get all non-recurring todos that fall within the next 30 days
+        $todos = Todo::whereBetween('completion_time', [$today, $endDate])
+            ->whereNull('is_recurring') // Exclude recurring todos for now
+            ->get();
+
+        // Get all recurring todos and generate occurrences within the next 30 days
+        $recurringTodos = Todo::whereNotNull('is_recurring') // Get recurring todos
+            ->get();
+
+        $recurringTodos = $this->generateRecurringTodos($recurringTodos);
+
+        // Combine non-recurring and recurring todos
+        $allTodos = $todos->merge($recurringTodos);
+
+        return $this->respondSuccess($allTodos);
     }
 
     /**
@@ -26,7 +44,7 @@ class TodoController extends ApiController
 
             return $this->respondNotFound();
         }
-        
+
         return $this->respondSuccess($todo);
     }
 
@@ -92,5 +110,24 @@ class TodoController extends ApiController
         $todo->delete(); // Soft delete
 
         return $this->respondSuccess();
+    }
+
+    /**
+     * Generate recurring todos for the next 30 days based on recurrence type.
+     *
+     * @param \Illuminate\Support\Collection $todos
+     * @return \Illuminate\Support\Collection
+     */
+    protected function generateRecurringTodos($todos)
+    {
+        $generatedTodos = [];
+
+        $today = now();
+        $endDate = now()->addDays(30);
+
+        // TODO: add funciton that multiplies all todos on daily, weekly and montly basis.
+        // response array should be in same format as incoiming data
+
+        return $todos;
     }
 }

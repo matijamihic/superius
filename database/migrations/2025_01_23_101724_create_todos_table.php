@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('title');
             $table->text('description')->nullable();
             $table->dateTime('completion_time');
-            $table->string('is_recurring')->nullable()->default(null);
+            $table->string('is_recurring')->nullable()->default(null); // daily, weekly, monthly, null
             $table->boolean('status')->default(false); // false = active, true = finished
             $table->softDeletes();
             $table->timestamps();
