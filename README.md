@@ -8,6 +8,7 @@ setup:
 6. php artisan serve
 
 
-Dokumentacija:
+Dokumentacija (documentation folder):
 
-Postman kolekcija (documentation folder)
+Postman kolekcija 
+App plan and tasks

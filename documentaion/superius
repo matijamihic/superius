@@ -1,0 +1,51 @@
+TODO APP
+
+- tablica zadatci
+	- title
+	- description	
+	- time and date of completion
+	- recurring (opcionalno)
+
+- dodavanje zadatka
+- edit pojedinog zadatka
+- lista svih zadataka
+- status (aktivan - dovrsen)
+- opcija brisanja
+
+-----------------------------
+-----------------------------
+
+basic setup
+
+1) create new laravel project
+2) create git repo and make fist push
+	https://github.com/matijamihic/superius.git
+3) add database (pgsql)
+4) install dependencies
+5) test homepage route and database connection
+
+
+---------------------------------------
+-----------------------------------------
+
+- add tasks table and migration +
+- add model +
+- add needed endpoints +
+- create controller with basic logic +
+
+----------------------------
+----------------------------
+
+- add validation classes
+
+---------------------------
+----------------------------
+
+- make responses more unified (ApiController creation)
+
+-----------------------------
+------------------------------
+
+- improve index:
+	- index now generates all todos for next 30 days	
+	- reccuring tasks are beeing generated
