@@ -6,7 +6,7 @@ use App\Http\Requests\TodoStoreRequest;
 use App\Http\Requests\TodoUpdateRequest;
 use App\Http\Requests\TodoStatusUpdateRequest;
 
-class TodoController extends Controller
+class TodoController extends ApiController
 {
     /**
      * List all TODOs.
@@ -23,10 +23,11 @@ class TodoController extends Controller
     {
         $todo = Todo::find($id);
         if (!$todo) {
-            return response()->json(['message' => 'Todo not found'], 404);
+
+            return $this->respondNotFound();
         }
         
-        return response()->json($todo);
+        return $this->respondSuccess($todo);
     }
 
     /**
@@ -34,16 +35,12 @@ class TodoController extends Controller
      */
     public function store(TodoStoreRequest $request)
     {
-        // Validation is already handled by TodoStoreRequest
 
         // Create the todo item
         $todo = Todo::create($request->validated());
 
         // Return response
-        return response()->json([
-            'message' => 'Todo created successfully',
-            'todo' => $todo
-        ], 201);
+        return $this->respondSuccess($todo);
     }
 
     /**
@@ -53,13 +50,14 @@ class TodoController extends Controller
     {
         $todo = Todo::find($id);
         if (!$todo) {
-            return response()->json(['message' => 'Todo not found'], 404);
+
+            return $this->respondNotFound();
         }
 
         // Update the todo item with validated data
         $todo->update($request->validated());
 
-        return response()->json($todo);
+        return $this->respondSuccess($todo);
     }
 
     /**
@@ -69,14 +67,15 @@ class TodoController extends Controller
     {
         $todo = Todo::find($id);
         if (!$todo) {
-            return response()->json(['message' => 'Todo not found'], 404);
+
+            return $this->respondNotFound();
         }
 
         // Update the status
         $todo->status = $request->validated()['status'];
         $todo->save();
 
-        return response()->json(['message' => 'Status updated successfully', 'todo' => $todo]);
+        return $this->respondSuccess($todo);
     }
 
     /**
@@ -86,11 +85,12 @@ class TodoController extends Controller
     {
         $todo = Todo::find($id);
         if (!$todo) {
-            return response()->json(['message' => 'Todo not found'], 404);
+
+            return $this->respondNotFound();
         }
 
         $todo->delete(); // Soft delete
 
-        return response()->json(['message' => 'Todo deleted successfully']);
+        return $this->respondSuccess();
     }
 }
