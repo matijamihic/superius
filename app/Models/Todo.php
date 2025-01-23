@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class Todo extends Model
 {
-    use HasFactory;
-
+    use HasFactory, SoftDeletes;
     /**
      * The table associated with the model.
      * (Optional: Laravel automatically assumes 'todos' based on model name)
@@ -23,6 +23,7 @@ class Todo extends Model
         'description',
         'completion_time',
         'is_recurring',
+        'status',
     ];
 
     /**
@@ -30,6 +31,7 @@ class Todo extends Model
      */
     protected $casts = [
         'completion_time' => 'datetime',
+        'status' => 'boolean',
     ];
 }
 
