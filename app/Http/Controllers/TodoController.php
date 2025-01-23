@@ -1,9 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Todo;
-use Illuminate\Http\Request;
+use App\Http\Requests\TodoStoreRequest;
+use App\Http\Requests\TodoUpdateRequest;
+use App\Http\Requests\TodoStatusUpdateRequest;
 
 class TodoController extends Controller
 {
@@ -24,22 +25,19 @@ class TodoController extends Controller
         if (!$todo) {
             return response()->json(['message' => 'Todo not found'], 404);
         }
+        
         return response()->json($todo);
     }
 
-    public function store(Request $request)
+    /**
+     * Store a new TODO item.
+     */
+    public function store(TodoStoreRequest $request)
     {
-        // Validate incoming request data
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'completion_time' => 'required|date',
-            'is_recurring' => 'nullable|string|in:daily,weekly,monthly',
-            'status' => 'boolean',
-        ]);
+        // Validation is already handled by TodoStoreRequest
 
         // Create the todo item
-        $todo = Todo::create($validated);
+        $todo = Todo::create($request->validated());
 
         // Return response
         return response()->json([
@@ -49,24 +47,17 @@ class TodoController extends Controller
     }
 
     /**
-     * Update a TODO item (edit title, description, completion_time, and status).
+     * Update a TODO item.
      */
-    public function update(Request $request, $id)
+    public function update(TodoUpdateRequest $request, $id)
     {
         $todo = Todo::find($id);
         if (!$todo) {
             return response()->json(['message' => 'Todo not found'], 404);
         }
 
-        $validated = $request->validate([
-            'title' => 'string|max:255',
-            'description' => 'nullable|string',
-            'completion_time' => 'date',
-            'is_recurring' => 'nullable|string|in:daily,weekly,monthly',
-            'status' => 'boolean',
-        ]);
-
-        $todo->update($validated);
+        // Update the todo item with validated data
+        $todo->update($request->validated());
 
         return response()->json($todo);
     }
@@ -74,18 +65,15 @@ class TodoController extends Controller
     /**
      * Update only the status of a TODO item.
      */
-    public function updateStatus(Request $request, $id)
+    public function updateStatus(TodoStatusUpdateRequest $request, $id)
     {
         $todo = Todo::find($id);
         if (!$todo) {
             return response()->json(['message' => 'Todo not found'], 404);
         }
 
-        $validated = $request->validate([
-            'status' => 'required|boolean',
-        ]);
-
-        $todo->status = $validated['status'];
+        // Update the status
+        $todo->status = $request->validated()['status'];
         $todo->save();
 
         return response()->json(['message' => 'Status updated successfully', 'todo' => $todo]);
