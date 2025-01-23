@@ -46,6 +46,22 @@ basic setup
 -----------------------------
 ------------------------------
 
-- improve index:
-	- index now generates all todos for next 30 days	
-	- reccuring tasks are beeing generated
+TODO:
+- create todos_occurances table
+- on todo update/create update todo_occurances
+- current todo becomes admin nterface
+- main app ednpoints are now todoOccurances endpoints (including status update and potentialy update (custom description?) and also potentialy delete - for skip occurence ?)
+- remove status update from todos - its not needed there it will only be tracked in todo_occurances
+- a new field in todos table  'date_to' for recurring todos needs
+- update todo store and update and delete to make changes on todo_occurances table
+	- generate for 90 days, 	
+	- on delete todo delete all connected todo_occurances,
+	- on update frist delete than re-generate future TOODS 
+- create cronjob that on daily bases creates new todo_occurances - it works default 90 days
+- update newly created todo_occurances_index to receive parameters:
+	- daily/weekly/montly parameters
+	- date (this date s starting date of the view) - e.g. 20.01.25 will show:
+		- daily - that day
+		- weekly - that day + 6 more days
+		- montly - that day + 30 more days
+- prevent overlap in todo_occurances table ?
